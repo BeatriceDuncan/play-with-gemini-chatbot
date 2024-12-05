@@ -21,7 +21,16 @@ const Chatbot = () => {
   const messageContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      generationConfig: {
+        temperature: 2.0,
+        maxOutputTokens: 200,
+        topP: 0.8,
+        topK: 40,
+        stopSequences: []
+      }
+    })
     const newChat = model.startChat()
     setChat(newChat)
   }, [])
@@ -53,7 +62,10 @@ const Chatbot = () => {
       setInput("")
     } catch (error) {
       console.error("Error fetching AI response:", error)
-      setMessages((prev) => [...prev, "AI: Sorry, I encountered an error."])
+      setMessages((prev) => [
+        ...prev,
+        "AI: Sorry, I encountered an error. Please try again later."
+      ])
     } finally {
       setIsLoading(false)
     }
