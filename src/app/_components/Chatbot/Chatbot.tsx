@@ -79,62 +79,67 @@ const Chatbot = () => {
   }
 
   return (
-    <Paper elevation={3} className={styles.container}>
-      <Box ref={messageContainerRef} className={styles.messageContainer}>
-        {messages.map((msg, index) => (
-          <Box
-            key={index}
-            className={`${styles.message} ${
-              msg.startsWith("User:") ? styles.userMessage : styles.aiMessage
-            }`}
-          >
+    <>
+      <h2 className={styles.title}>Gemini Chatbot</h2>
+      <Paper elevation={3} className={styles.container}>
+        <Box ref={messageContainerRef} className={styles.messageContainer}>
+          {messages.map((msg, index) => (
             <Box
-              className={`${styles.iconBubble} ${
-                msg.startsWith("User:") ? styles.userIcon : styles.aiIcon
+              key={index}
+              className={`${styles.message} ${
+                msg.startsWith("User:") ? styles.userMessage : styles.aiMessage
               }`}
             >
+              <Box
+                className={`${styles.iconBubble} ${
+                  msg.startsWith("User:") ? styles.userIcon : styles.aiIcon
+                }`}
+              >
+                {msg.startsWith("User:") ? (
+                  <PersonIcon sx={{ color: "white", fontSize: 18 }} />
+                ) : (
+                  <RobotIcon sx={{ color: "white", fontSize: 18 }} />
+                )}
+              </Box>
               {msg.startsWith("User:") ? (
-                <PersonIcon sx={{ color: "white", fontSize: 18 }} />
+                <Typography sx={{ m: 0 }}>
+                  {msg.replace("User: ", "")}
+                </Typography>
               ) : (
-                <RobotIcon sx={{ color: "white", fontSize: 18 }} />
+                <Typography
+                  component="div"
+                  sx={{
+                    m: 0,
+                    "& p": { m: 0 }
+                  }}
+                >
+                  <ReactMarkdown>{msg.replace("AI: ", "")}</ReactMarkdown>
+                </Typography>
               )}
             </Box>
-            {msg.startsWith("User:") ? (
-              <Typography sx={{ m: 0 }}>{msg.replace("User: ", "")}</Typography>
-            ) : (
-              <Typography
-                component="div"
-                sx={{
-                  m: 0,
-                  "& p": { m: 0 }
-                }}
-              >
-                <ReactMarkdown>{msg.replace("AI: ", "")}</ReactMarkdown>
-              </Typography>
-            )}
-          </Box>
-        ))}
-      </Box>
-      <Box className={styles.inputContainer}>
-        <TextField
-          inputRef={inputRef}
-          fullWidth
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyPress}
-          placeholder="Type your message..."
-          disabled={isLoading}
-          size="small"
-        />
-        <Button
-          variant="contained"
-          onClick={() => void sendMessage()}
-          disabled={isLoading}
-        >
-          {isLoading ? "Sending..." : "Submit"}
-        </Button>
-      </Box>
-    </Paper>
+          ))}
+        </Box>
+        <Box className={styles.inputContainer}>
+          <TextField
+            inputRef={inputRef}
+            fullWidth
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyPress}
+            placeholder="Type your message..."
+            disabled={isLoading}
+            size="small"
+          />
+          <Button
+            variant="contained"
+            onClick={() => void sendMessage()}
+            disabled={isLoading}
+          >
+            {isLoading ? "Sending..." : "Submit"}
+          </Button>
+        </Box>
+      </Paper>
+    </>
   )
 }
 
